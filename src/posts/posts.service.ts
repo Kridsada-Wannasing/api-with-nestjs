@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import CreatePostDto from './dto/create-post.dto';
 import UpdatePostDto from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import Post from './entities/post.entity';
+import Post from './post.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

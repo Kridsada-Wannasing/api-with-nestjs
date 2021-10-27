@@ -6,10 +6,12 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import PostsService from './posts.service';
 import CreatePostDto from './dto/create-post.dto';
 import UpdatePostDto from './dto/update-post.dto';
+import JwtAuthGuard from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('posts')
 export default class PostsController {
@@ -26,6 +28,7 @@ export default class PostsController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async createPost(@Body() post: CreatePostDto) {
     return this.postsService.createPost(post);
   }
