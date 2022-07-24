@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
-export default class UpdatePostDto {
+export class UpdateCategoryDto {
   @IsNumber()
   @IsOptional()
   id: number;
@@ -8,10 +8,7 @@ export default class UpdatePostDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  content: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  title: string;
+  name: string;
 }
+
+export default UpdateCategoryDto;
