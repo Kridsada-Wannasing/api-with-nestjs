@@ -9,6 +9,7 @@ import { ExceptionsLoggerFilter } from './utils/exceptions-logger.filter';
 import { APP_FILTER } from '@nestjs/core';
 import { CategoriesModule } from './categories/categories.module';
 import { FilesModule } from './files/files.module';
+import { SearchModule } from './search/search.module';
 import CategoriesController from './categories/categories.controller';
 import CategoriesService from './categories/categories.service';
 
@@ -36,6 +37,7 @@ import CategoriesService from './categories/categories.service';
     AuthModule,
     CategoriesModule,
     FilesModule,
+    SearchModule,
   ],
   controllers: [CategoriesController],
   providers: [
