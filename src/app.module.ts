@@ -7,11 +7,9 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ExceptionsLoggerFilter } from './utils/exceptions-logger.filter';
 import { APP_FILTER } from '@nestjs/core';
-import { CategoryService } from './categories/category/category.service';
-import { CategoryService } from './categories/category.service';
-import { CategoriesService } from './categories/categories.service';
-import { CategoriesController } from './categories/categories.controller';
 import { CategoriesModule } from './categories/categories.module';
+import CategoriesController from './categories/categories.controller';
+import CategoriesService from './categories/categories.service';
 
 @Module({
   imports: [
@@ -39,7 +37,6 @@ import { CategoriesModule } from './categories/categories.module';
       provide: APP_FILTER,
       useClass: ExceptionsLoggerFilter,
     },
-    CategoryService,
     CategoriesService,
   ],
 })
