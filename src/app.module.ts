@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { ExceptionsLoggerFilter } from './utils/exceptions-logger.filter';
 import { APP_FILTER } from '@nestjs/core';
 import { CategoriesModule } from './categories/categories.module';
+import { FilesModule } from './files/files.module';
 import CategoriesController from './categories/categories.controller';
 import CategoriesService from './categories/categories.service';
 
@@ -23,6 +24,10 @@ import CategoriesService from './categories/categories.service';
         POSTGRES_DB: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRATION_TIME: Joi.string().required(),
+        AWS_REGION: Joi.string().required(),
+        AWS_ACCESS_KEY_ID: Joi.string().required(),
+        AWS_SECRET_ACCESS_KEY: Joi.string().required(),
+        AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
         PORT: Joi.number(),
       }),
     }),
@@ -30,6 +35,7 @@ import CategoriesService from './categories/categories.service';
     UsersModule,
     AuthModule,
     CategoriesModule,
+    FilesModule,
   ],
   controllers: [CategoriesController],
   providers: [
