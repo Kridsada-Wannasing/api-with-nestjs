@@ -10,8 +10,6 @@ import { APP_FILTER } from '@nestjs/core';
 import { CategoriesModule } from './categories/categories.module';
 import { FilesModule } from './files/files.module';
 import { SearchModule } from './search/search.module';
-import CategoriesController from './categories/categories.controller';
-import CategoriesService from './categories/categories.service';
 
 @Module({
   imports: [
@@ -43,13 +41,12 @@ import CategoriesService from './categories/categories.service';
     FilesModule,
     SearchModule,
   ],
-  controllers: [CategoriesController],
+  controllers: [],
   providers: [
     {
       provide: APP_FILTER,
       useClass: ExceptionsLoggerFilter,
     },
-    CategoriesService,
   ],
 })
 export class AppModule {}
