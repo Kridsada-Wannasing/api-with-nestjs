@@ -3,7 +3,7 @@ import CreatePostDto from './dto/create-post.dto';
 import UpdatePostDto from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import Post from './post.entity';
-import { In, Repository } from 'typeorm';
+import { FindManyOptions, In, MoreThan, Repository } from 'typeorm';
 import User from 'src/users/user.entity';
 import { PostNotFoundException } from './exception/post-not-found.exception';
 import { PostsSearchService } from './posts-search.service';
@@ -16,8 +16,28 @@ export default class PostsService {
     private postsSearchService: PostsSearchService,
   ) {}
 
-  getAllPosts() {
-    return this.postsRepository.find({ relations: ['author'] });
+  async getAllPosts(offset?: number, limit?: number, startId?: number) {
+    const where: FindManyOptions<Post>['where'] = {};
+    let separateCount = 0;
+    if (startId) {
+      where.id = MoreThan(startId);
+      separateCount = await this.postsRepository.count();
+    }
+
+    const [items, count] = await this.postsRepository.findAndCount({
+      where,
+      relations: ['author'],
+      order: {
+        id: 'ASC',
+      },
+      skip: offset,
+      take: limit,
+    });
+
+    return {
+      items,
+      count: startId ? separateCount : count,
+    };
   }
 
   async getPostById(id: number) {
@@ -60,9 +80,19 @@ export default class PostsService {
     await this.postsSearchService.remove(id);
   }
 
-  async searchForPosts(text: string) {
-    const results = await this.postsSearchService.search(text);
-    const ids = results.map((result) => result.id);
+  async searchForPosts(
+    text: string,
+    offset?: number,
+    limit?: number,
+    startId?: number,
+  ) {
+    const data = await this.postsSearchService.search(
+      text,
+      offset,
+      limit,
+      startId,
+    );
+    const ids = data.results.map((result) => result.id);
     if (!ids.length) {
       return [];
     }
