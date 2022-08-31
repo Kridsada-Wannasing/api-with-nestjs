@@ -38,6 +38,9 @@ class Post {
   @ManyToMany(() => Category, (category: Category) => category.posts)
   @JoinTable()
   public categories: Category[];
+
+  @Column('simple-array')
+  public paragraphs: string[];
 }
 
 export default Post;
