@@ -10,6 +10,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { CategoriesModule } from './categories/categories.module';
 import { FilesModule } from './files/files.module';
 import { SearchModule } from './search/search.module';
+import { SubscribersModule } from './subscribers/subscribers.module';
 
 @Module({
   imports: [
@@ -31,6 +32,8 @@ import { SearchModule } from './search/search.module';
         AWS_ACCESS_KEY_ID: Joi.string().required(),
         AWS_SECRET_ACCESS_KEY: Joi.string().required(),
         AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
+        SUBSCRIBERS_SERVICE_HOST: Joi.number().required(),
+        SUBSCRIBERS_SERVICE_PORT: Joi.number().required(),
         PORT: Joi.number(),
       }),
     }),
@@ -40,6 +43,7 @@ import { SearchModule } from './search/search.module';
     CategoriesModule,
     FilesModule,
     SearchModule,
+    SubscribersModule,
   ],
   controllers: [],
   providers: [
