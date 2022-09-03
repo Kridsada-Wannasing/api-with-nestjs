@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import User from '../users/user.entity';
-import Category from 'src/categories/category.entity';
+import Category from '../categories/category.entity';
 
 @Entity()
 class Post {
