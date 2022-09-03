@@ -9,6 +9,8 @@ import {
 import { Exclude, Expose } from 'class-transformer';
 import Address from './address.entity';
 import Post from '../posts/post.entity';
+import { PublicFile } from '../files/public-file.entity';
+import { PrivateFile } from '../files/private-file.entity';
 
 @Entity()
 class User {
@@ -36,6 +38,17 @@ class User {
 
   @OneToMany(() => Post, (post: Post) => post.author)
   public posts: Post[];
+
+  @JoinColumn()
+  @OneToOne(() => PublicFile, { eager: true, nullable: true })
+  public avatar?: PublicFile;
+
+  @OneToMany(() => PrivateFile, (file: PrivateFile) => file.owner)
+  public files: PrivateFile[];
+
+  @Column({ nullable: true })
+  @Exclude()
+  public currentHashedRefreshToken?: string;
 }
 
 export default User;

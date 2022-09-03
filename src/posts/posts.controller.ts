@@ -6,25 +6,33 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import PostsService from './posts.service';
 import CreatePostDto from './dto/create-post.dto';
-import JwtAuthGuard from 'src/auth/guards/jwt-auth.guard';
-import { ExceptionsLoggerFilter } from 'src/utils/exceptions-logger.filter';
-import FindOneParams from 'src/utils/find-one-params';
+import JwtAuthGuard from '../auth/guards/jwt-auth.guard';
+import { ExceptionsLoggerFilter } from '../utils/exceptions-logger.filter';
+import FindOneParams from '../utils/find-one-params';
 import UpdatePostDto from './dto/update-post.dto';
-import RequestWithUser from 'src/auth/interfaces/request-with-user.interface';
+import RequestWithUser from '../auth/interfaces/request-with-user.interface';
+import { PaginationParams } from '../utils/types/pagination-params';
 
 @Controller('posts')
 export default class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get()
-  getAllPosts() {
-    return this.postsService.getAllPosts();
+  async getPosts(
+    @Query('search') search: string,
+    @Query() { offset, limit, startId }: PaginationParams,
+  ) {
+    if (search) {
+      return this.postsService.searchForPosts(search, offset, limit, startId);
+    }
+    return this.postsService.getAllPosts(offset, limit, startId);
   }
 
   @Get(':id')
