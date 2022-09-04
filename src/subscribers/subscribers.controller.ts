@@ -30,6 +30,6 @@ export class SubscribersController {
   @Post()
   @UseGuards(JwtAuthGuard)
   async createPost(@Body() subscriber: CreateSubscriberDto) {
-    return this.subscribersService.emit({ cmd: 'add-subscriber' }, subscriber);
+    return this.subscribersService.send({ cmd: 'add-subscriber' }, subscriber);
   }
 }
