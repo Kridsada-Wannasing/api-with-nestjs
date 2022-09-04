@@ -5,11 +5,13 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import User from '../users/user.entity';
 import Category from '../categories/category.entity';
+import { Comment } from '../comments/comment.entity';
 
 @Entity()
 @Index(['postId', 'authorId'])
@@ -41,6 +43,9 @@ class Post {
 
   @Column('simple-array')
   public paragraphs: string[];
+
+  @OneToMany(() => Comment, (comment: Comment) => comment.post)
+  public comments?: Comment[];
 }
 
 export default Post;
