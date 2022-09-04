@@ -4,32 +4,37 @@ import {
   Controller,
   Get,
   Inject,
+  OnModuleInit,
   Post,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientGrpc } from '@nestjs/microservices';
 import JwtAuthGuard from '../auth/guards/jwt-auth.guard';
 import { CreateSubscriberDto } from './dto/create-subscriber.dto';
+import SubscribersService from './subscribers.service.interface';
 
 @Controller('subscribers')
 @UseInterceptors(ClassSerializerInterceptor)
-export class SubscribersController {
-  constructor(
-    @Inject('SUBSCRIBERS_SERVICE') private subscribersService: ClientProxy,
-  ) {}
+export class SubscribersController implements OnModuleInit {
+  private subscribersService: SubscribersService;
 
-  // Using the TCP layer
+  constructor(@Inject('SUBSCRIBERS_PACKAGE') private client: ClientGrpc) {}
+
+  onModuleInit() {
+    this.subscribersService =
+      this.client.getService<SubscribersService>('SubscribersService');
+  }
+
   @Get()
   @UseGuards(JwtAuthGuard)
   async getSubscribers() {
-    return this.subscribersService.send({ cmd: 'get-all-subscribers' }, '');
+    return this.subscribersService.getAllSubscribers({});
   }
 
-  // Using the event-based communication
   @Post()
   @UseGuards(JwtAuthGuard)
   async createPost(@Body() subscriber: CreateSubscriberDto) {
-    return this.subscribersService.send({ cmd: 'add-subscriber' }, subscriber);
+    return this.subscribersService.addSubscriber(subscriber);
   }
 }

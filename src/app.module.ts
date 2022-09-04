@@ -34,6 +34,7 @@ import { SubscribersModule } from './subscribers/subscribers.module';
         AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
         SUBSCRIBERS_SERVICE_HOST: Joi.number().required(),
         SUBSCRIBERS_SERVICE_PORT: Joi.number().required(),
+        GRPC_CONNECTION_URL: Joi.string().required(),
         PORT: Joi.number(),
       }),
     }),
