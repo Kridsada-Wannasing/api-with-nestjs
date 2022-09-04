@@ -11,6 +11,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { FilesModule } from './files/files.module';
 import { SearchModule } from './search/search.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { SubscribersModule } from './subscribers/subscribers.module';
     FilesModule,
     SearchModule,
     SubscribersModule,
+    CommentsModule,
   ],
   controllers: [],
   providers: [
