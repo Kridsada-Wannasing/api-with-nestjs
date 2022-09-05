@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import CreatePostDto from './dto/create-post.dto';
 import UpdatePostDto from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +7,8 @@ import { FindManyOptions, In, MoreThan, Repository } from 'typeorm';
 import User from 'src/users/user.entity';
 import { PostNotFoundException } from './exception/post-not-found.exception';
 import { PostsSearchService } from './posts-search.service';
+import { Cache } from 'cache-manager';
+import { GET_POSTS_CACHE_KEY } from './posts-cache-key.constant';
 
 @Injectable()
 export default class PostsService {
@@ -14,7 +16,17 @@ export default class PostsService {
     @InjectRepository(Post)
     private postsRepository: Repository<Post>,
     private postsSearchService: PostsSearchService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
+
+  async clearCache() {
+    const keys: string[] = await this.cacheManager.store.keys();
+    keys.forEach((key) => {
+      if (key.startsWith(GET_POSTS_CACHE_KEY)) {
+        this.cacheManager.del(key);
+      }
+    });
+  }
 
   async getAllPosts(offset?: number, limit?: number, startId?: number) {
     const where: FindManyOptions<Post>['where'] = {};
@@ -57,6 +69,7 @@ export default class PostsService {
     });
     if (updatedPost) {
       await this.postsSearchService.update(updatedPost);
+      await this.clearCache();
       return updatedPost;
     }
     throw new PostNotFoundException(id);
@@ -69,6 +82,7 @@ export default class PostsService {
     });
     await this.postsRepository.save(newPost);
     this.postsSearchService.indexPost(newPost);
+    await this.clearCache();
     return newPost;
   }
 
@@ -78,6 +92,7 @@ export default class PostsService {
       throw new PostNotFoundException(id);
     }
     await this.postsSearchService.remove(id);
+    await this.clearCache();
   }
 
   async searchForPosts(
