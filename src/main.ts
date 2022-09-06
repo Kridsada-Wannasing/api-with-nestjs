@@ -5,6 +5,7 @@ import { ExceptionsLoggerFilter } from './utils/exceptions-logger.filter';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'aws-sdk';
+import { runInCluster } from './utils/run-in-cluster';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,4 +24,4 @@ async function bootstrap() {
 
   await app.listen(3000);
 }
-bootstrap();
+runInCluster(bootstrap);

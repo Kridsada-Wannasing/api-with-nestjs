@@ -37,6 +37,8 @@ import { ProductCategoriesModule } from './product-categories/product-categories
         AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
         SUBSCRIBERS_SERVICE_HOST: Joi.number().required(),
         SUBSCRIBERS_SERVICE_PORT: Joi.number().required(),
+        REDIS_HOST: Joi.string().required(),
+        REDIS_PORT: Joi.number().required(),
         PORT: Joi.number(),
       }),
     }),
