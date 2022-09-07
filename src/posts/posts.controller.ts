@@ -17,13 +17,13 @@ import {
 } from '@nestjs/common';
 import PostsService from './posts.service';
 import CreatePostDto from './dto/create-post.dto';
-import JwtAuthGuard from '../auth/guards/jwt-auth.guard';
 import { ExceptionsLoggerFilter } from '../utils/exceptions-logger.filter';
 import FindOneParams from '../utils/find-one-params';
 import UpdatePostDto from './dto/update-post.dto';
 import RequestWithUser from '../auth/interfaces/request-with-user.interface';
 import { PaginationParams } from '../utils/types/pagination-params';
 import { GET_POSTS_CACHE_KEY } from './posts-cache-key.constant';
+import JwtTwoFactorGuard from '../auth/guards/jwt-two-factor.guard';
 
 @Controller('posts')
 export default class PostsController {
@@ -50,7 +50,7 @@ export default class PostsController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtTwoFactorGuard)
   async createPost(@Body() post: CreatePostDto, @Req() req: RequestWithUser) {
     return this.postsService.createPost(post, req.user);
   }
