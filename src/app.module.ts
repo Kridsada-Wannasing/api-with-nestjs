@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PostsModule } from './posts/posts.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
@@ -18,6 +18,8 @@ import { EmailModule } from './email/email.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EmailSchedulingModule } from './email-scheduling/email-scheduling.module';
 import { ChatModule } from './chat/chat.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -46,9 +48,19 @@ import { ChatModule } from './chat/chat.module';
         EMAIL_SERVICE: Joi.string().required(),
         EMAIL_USER: Joi.string().required(),
         EMAIL_PASSWORD: Joi.string().required(),
+        GRAPHQL_PLAYGROUND: Joi.number(),
         PORT: Joi.number(),
       }),
     }),
+    GraphQLModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        playground: Boolean(configService.get('GRAPHQL_PLAYGROUND')),
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      }),
+    }),
+    ScheduleModule.forRoot(),
     DatabaseModule,
     UsersModule,
     AuthModule,
@@ -60,7 +72,6 @@ import { ChatModule } from './chat/chat.module';
     ProductsModule,
     ProductCategoriesModule,
     EmailModule,
-    ScheduleModule.forRoot(),
     EmailSchedulingModule,
     ChatModule,
   ],
