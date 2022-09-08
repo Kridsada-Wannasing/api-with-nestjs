@@ -28,7 +28,12 @@ export default class PostsService {
     });
   }
 
-  async getAllPosts(offset?: number, limit?: number, startId?: number) {
+  async getPosts(
+    offset?: number,
+    limit?: number,
+    startId?: number,
+    options?: FindManyOptions<Post>,
+  ) {
     const where: FindManyOptions<Post>['where'] = {};
     let separateCount = 0;
     if (startId) {
@@ -38,12 +43,12 @@ export default class PostsService {
 
     const [items, count] = await this.postsRepository.findAndCount({
       where,
-      relations: ['author'],
       order: {
         id: 'ASC',
       },
       skip: offset,
       take: limit,
+      ...options,
     });
 
     return {
@@ -119,5 +124,11 @@ export default class PostsService {
       'SELECT * from post WHERE $1 = ANY(paragraphs)',
       [paragraph],
     );
+  }
+
+  async getPostsWithAuthors(offset?: number, limit?: number, startId?: number) {
+    return this.getPosts(offset, limit, startId, {
+      relations: ['author'],
+    });
   }
 }

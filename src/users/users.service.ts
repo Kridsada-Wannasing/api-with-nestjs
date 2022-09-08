@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilesService } from '../files/files.service';
-import { Connection, Repository } from 'typeorm';
+import { Connection, In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import User from './user.entity';
 import bcrypt from 'bcrypt';
@@ -151,6 +151,12 @@ export class UsersService {
   async turnOnTwoFactorAuthentication(userId: number) {
     return this.usersRepository.update(userId, {
       isTwoFactorAuthenticationEnabled: true,
+    });
+  }
+
+  async getByIds(ids: number[]) {
+    return this.usersRepository.find({
+      where: { id: In(ids) },
     });
   }
 }

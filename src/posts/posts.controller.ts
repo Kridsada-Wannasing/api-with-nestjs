@@ -40,7 +40,7 @@ export default class PostsController {
     if (search) {
       return this.postsService.searchForPosts(search, offset, limit, startId);
     }
-    return this.postsService.getAllPosts(offset, limit, startId);
+    return this.postsService.getPosts(offset, limit, startId);
   }
 
   @Get(':id')
