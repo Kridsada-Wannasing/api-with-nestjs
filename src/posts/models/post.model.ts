@@ -17,4 +17,10 @@ export class Post {
 
   @Field()
   author: User;
+
+  @Field()
+  createdAt: Date;
+
+  @Field({ nullable: true })
+  scheduledDate?: Date;
 }
