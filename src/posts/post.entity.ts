@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   JoinTable,
@@ -50,6 +51,12 @@ class Post {
 
   @OneToMany(() => Comment, (comment: Comment) => comment.post)
   public comments?: Comment[];
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', nullable: true })
+  scheduledDate?: Date;
 }
 
 export default Post;
