@@ -1,6 +1,8 @@
-import { IsNumberString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsNumber } from 'class-validator';
 
 export default class FindOneParams {
-  @IsNumberString()
-  id: string;
+  @IsNumber()
+  @Transform(({ value }) => Number(value))
+  id: number;
 }

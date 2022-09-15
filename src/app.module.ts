@@ -21,6 +21,7 @@ import { ChatModule } from './chat/chat.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { PubSubModule } from './pub-sub/pub-sub.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { PubSubModule } from './pub-sub/pub-sub.module';
     EmailSchedulingModule,
     ChatModule,
     PubSubModule,
+    PrismaModule,
   ],
   controllers: [],
   providers: [

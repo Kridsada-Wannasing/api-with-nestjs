@@ -1,10 +1,10 @@
 version: '3'
 services:
   postgres:
-    container_name: postgres
+    container_name: nestjs-postgres
     image: postgres:latest
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - /var/folders/data/postgres:/data/postgres
     env_file:
@@ -15,10 +15,10 @@ services:
   pgadmin:
     links:
       - postgres:postgres
-    container_name: pgadmin
+    container_name: nestjs-pgadmin
     image: dpage/pgadmin4
     ports:
-      - '8080:80'
+      - "8080:80"
     volumes:
       - /var/folders/data/pgadmin:/root/.pgadmin
     env_file:
