@@ -7,6 +7,7 @@ import Post from './post.entity';
 import { SearchModule } from '../search/search.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import * as redisStore from 'cache-manager-redis-store';
         ttl: 120,
       }),
     }),
+    PrismaModule,
   ],
   controllers: [PostsController],
   providers: [PostsService, PostsSearchService],

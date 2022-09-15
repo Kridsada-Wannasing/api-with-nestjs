@@ -54,7 +54,7 @@ class User {
   public twoFactorAuthenticationSecret?: string;
 
   @Column({ default: false })
-  public isTwoFactorAuthenticationEnabled: boolean;
+  public isTwoFactorAuthenticationEnabled?: boolean;
 }
 
 export default User;

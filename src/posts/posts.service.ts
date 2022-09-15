@@ -9,6 +9,9 @@ import { PostNotFoundException } from './exception/post-not-found.exception';
 import { PostsSearchService } from './posts-search.service';
 import { Cache } from 'cache-manager';
 import { GET_POSTS_CACHE_KEY } from './posts-cache-key.constant';
+import { PrismaService } from '../prisma/prisma.service';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { PrismaError } from 'src/utils/prisma-error';
 
 @Injectable()
 export default class PostsService {
@@ -17,6 +20,7 @@ export default class PostsService {
     private postsRepository: Repository<Post>,
     private postsSearchService: PostsSearchService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly prismaService: PrismaService,
   ) {}
 
   async clearCache() {
@@ -130,5 +134,63 @@ export default class PostsService {
     return this.getPosts(offset, limit, startId, {
       relations: ['author'],
     });
+  }
+
+  async getPostsByPrisma() {
+    return this.prismaService.post.findMany();
+  }
+
+  async getPostByIdByPrisma(id: number) {
+    const post = await this.prismaService.post.findUnique({ where: { id } });
+
+    if (!post) throw new PostNotFoundException(id);
+
+    return post;
+  }
+
+  async createPostByPrisma(post: CreatePostDto) {
+    return this.prismaService.post.create({
+      data: post,
+    });
+  }
+
+  async updatePostByPrisma(id: number, post: UpdatePostDto) {
+    try {
+      return await this.prismaService.post.update({
+        data: {
+          ...post,
+          id: undefined,
+        },
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === PrismaError.RecordDoesNotExist
+      ) {
+        throw new PostNotFoundException(id);
+      }
+      throw error;
+    }
+  }
+
+  async deletePostByPrisma(id: number) {
+    try {
+      return this.prismaService.post.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === PrismaError.RecordDoesNotExist
+      ) {
+        throw new PostNotFoundException(id);
+      }
+      throw error;
+    }
   }
 }
