@@ -22,6 +22,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { PubSubModule } from './pub-sub/pub-sub.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { ApolloDriver } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { PrismaModule } from './prisma/prisma.module';
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         installSubscriptionHandlers: true,
       }),
+      driver: ApolloDriver,
     }),
     ScheduleModule.forRoot(),
     DatabaseModule,
