@@ -1,5 +1,7 @@
-import cluster from 'cluster';
+import * as notReallyCluster from 'cluster';
 import * as os from 'os';
+
+const cluster = notReallyCluster as unknown as notReallyCluster.Cluster;
 
 export function runInCluster(bootstrap: () => Promise<void>) {
   const numberOfCores = os.cpus().length;
