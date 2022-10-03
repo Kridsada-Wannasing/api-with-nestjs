@@ -11,7 +11,7 @@ import {
   Subscription,
 } from '@nestjs/graphql';
 import RequestWithUser from 'src/auth/interfaces/request-with-user.interface';
-import User from '../users/user.entity';
+import { User } from '../users/models/user.model';
 import { GraphqlJwtAuthGuard } from '../auth/guards/graphql-jwt-auth.guard';
 import { CreatePostInput } from './inputs/post.input';
 import { Post } from './models/post.model';
@@ -24,12 +24,12 @@ import {
   simplifyParsedResolveInfoFragmentWithType,
 } from 'graphql-parse-resolve-info';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
-import { PUB_SUB } from 'src/pub-sub/pub-sub.module';
+import { PUB_SUB } from '../pub-sub/pub-sub.module';
 
 const POST_ADDED_EVENT = 'postAdded';
 
 @Resolver(() => Post)
-export class PostResolver {
+export class PostsResolver {
   constructor(
     private postsService: PostsService,
     private postsLoaders: PostsLoaders,
