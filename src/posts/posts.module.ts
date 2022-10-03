@@ -8,6 +8,9 @@ import { SearchModule } from '../search/search.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 import { PrismaModule } from '../prisma/prisma.module';
+import { PostsResolver } from './posts.resolver';
+import { UsersModule } from '../users/users.module';
+import PostsLoaders from './loaders/posts.loaders';
 
 @Module({
   imports: [
@@ -24,8 +27,9 @@ import { PrismaModule } from '../prisma/prisma.module';
       }),
     }),
     PrismaModule,
+    UsersModule,
   ],
   controllers: [PostsController],
-  providers: [PostsService, PostsSearchService],
+  providers: [PostsService, PostsSearchService, PostsResolver, PostsLoaders],
 })
 export class PostsModule {}

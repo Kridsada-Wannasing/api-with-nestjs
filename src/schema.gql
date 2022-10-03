@@ -1,18 +1,42 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Int!
+  email: String!
+}
+
 type Post {
-  id: Int!,
-  title: String!,
-  paragraphs: [String!]!
-}
-
-type Query {
-  posts(): [Post!]!
-}
-
-input NewPostInput {
+  id: Int!
   title: String!
   paragraphs: [String!]!
+  authorId: Int!
+  author: User!
+  createdAt: DateTime!
+  scheduledDate: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  posts: [Post!]!
 }
 
 type Mutation {
-  createdPost(input: NewPostInput): Post
+  createPost(input: CreatePostInput!): Post!
+}
+
+input CreatePostInput {
+  content: String!
+  title: String!
+  paragraphs: [String!]!
+  scheduledDate: DateTime
+}
+
+type Subscription {
+  postAdded: Post!
 }
