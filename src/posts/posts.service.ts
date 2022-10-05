@@ -12,6 +12,7 @@ import { GET_POSTS_CACHE_KEY } from './posts-cache-key.constant';
 import { PrismaService } from '../prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaError } from 'src/utils/prisma-error';
+import { User as PrismaUser } from '@prisma/client';
 
 @Injectable()
 export default class PostsService {
@@ -148,9 +149,24 @@ export default class PostsService {
     return post;
   }
 
-  async createPostByPrisma(post: CreatePostDto) {
+  async createPostByPrisma(post: CreatePostDto, user: PrismaUser) {
+    const categories = post.categoryIds.map((category) => ({ id: category }));
+
     return this.prismaService.post.create({
-      data: post,
+      data: {
+        ...post,
+        author: {
+          connect: {
+            id: user.id,
+          },
+        },
+        categories: {
+          connect: categories,
+        },
+      },
+      include: {
+        categories: true,
+      },
     });
   }
 

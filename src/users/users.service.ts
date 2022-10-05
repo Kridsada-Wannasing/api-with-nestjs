@@ -12,6 +12,7 @@ import { Connection, In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import User from './user.entity';
 import bcrypt from 'bcrypt';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +21,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
     private readonly filesService: FilesService,
     private connection: Connection,
+    private readonly prismaService: PrismaService,
   ) {}
 
   async getByEmail(email: string) {
@@ -37,6 +39,21 @@ export class UsersService {
     const newUser = this.usersRepository.create(userData);
     await this.usersRepository.save(newUser);
     return newUser;
+
+    // with prisma
+    // const address = userData.address;
+    // return this.prismaService.user.create({
+    //   data: {
+    //     ...userData,
+    //     address: {
+    //       create: address,
+    //     },
+    //   },
+    //   // After save to db, Result will join with address
+    //   include: {
+    //     address: true,
+    //   },
+    // });
   }
 
   async getById(id: number) {

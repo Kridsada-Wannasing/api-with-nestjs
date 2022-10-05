@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export default class CreatePostDto {
   @IsString()
@@ -12,4 +12,8 @@ export default class CreatePostDto {
   @IsString({ each: true })
   @IsNotEmpty()
   paragraphs: string[];
+
+  @IsOptional()
+  @IsNumber({}, { each: true })
+  categoryIds?: number[];
 }

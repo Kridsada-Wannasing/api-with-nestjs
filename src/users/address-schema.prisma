@@ -1,0 +1,7 @@
+model Address {
+    id      Int    @id @default(autoincrement())
+    street  String
+    city    String
+    country String
+    user    User?
+}
