@@ -10,7 +10,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { CategoriesModule } from './categories/categories.module';
 import { FilesModule } from './files/files.module';
 import { SearchModule } from './search/search.module';
-import { SubscribersModule } from './subscribers/subscribers.module';
+// import { SubscribersModule } from './subscribers/subscribers.module';
 import { CommentsModule } from './comments/comments.module';
 import { ProductsModule } from './products/products.module';
 import { ProductCategoriesModule } from './product-categories/product-categories.module';
@@ -72,7 +72,7 @@ import { ApolloDriver } from '@nestjs/apollo';
     CategoriesModule,
     FilesModule,
     SearchModule,
-    SubscribersModule,
+    // SubscribersModule,
     CommentsModule,
     ProductsModule,
     ProductCategoriesModule,
